@@ -1,0 +1,12 @@
+#biblioteca proprietária
+libs/
+
+#docs do projeto
+
+docs/
+
+#arquivos de configuração
+.env
+.vscode/
+.agents/
+AGENT.md
