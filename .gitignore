@@ -1,9 +1,5 @@
 #biblioteca proprietária
 libs/
 
-#docs do projeto
-
-docs/
-
 #arquivos de configuração
 .vscode/

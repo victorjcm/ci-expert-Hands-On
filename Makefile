@@ -10,14 +10,14 @@ SYN_DIR   = syn
 # ==========================================
 PKG_FILES = 
 
-RTL_FILES = 
+RTL_FILES = $(RTL_DIR)/aes_teste.sv
 
-TB_FILES =
+TB_FILES = $(TB_DIR)/tb_aes_teste.sv
 
 # ==========================================
 # Top do testbench
 # ==========================================
-TOP = 
+TOP = tb_aes_teste
 
 # ==========================================
 # Flags
