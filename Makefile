@@ -8,7 +8,7 @@ SYN_DIR   = syn
 # ==========================================
 # Arquivos
 # ==========================================
-PKG_FILES = 
+
 
 RTL_FILES = $(RTL_DIR)/aes_teste.sv
 
@@ -73,7 +73,6 @@ synth:
 # ==========================================
 clean_synth:
 	rm -rf \
-		./vending_top.ddc \
 		./alib-52 \
 		./default.svf \
 		./work* \
@@ -87,6 +86,7 @@ clean_synth:
 # ==========================================
 clean_sim:
 	rm -rf \
+		syn/reports \
 		csrc \
 		simv* \
 		*.daidir \
