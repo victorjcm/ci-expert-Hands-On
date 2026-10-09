@@ -6,18 +6,21 @@
 # Carregar configuração
 # ------------------------------------------------------------
 
-source syn/.synopsys_dc.setup
+set search_path [list . .. /libs]
+set target_library "saed32rvt_tt1v25c.db"
+set link_library "* $target_library"
 
 # ------------------------------------------------------------
 # Ler RTL
 # ------------------------------------------------------------
 
+analyze -format sverilog rtl/aes_teste.sv
 
 # ------------------------------------------------------------
 # Elaborar
 # ------------------------------------------------------------
 
-elaborate 
+elaborate aes_teste
 
 link
 
@@ -25,7 +28,7 @@ link
 # Constraints
 # ------------------------------------------------------------
 
-read_sdc syn/vending.sdc
+#read_sdc syn/aes_teste.sdc
 
 # ------------------------------------------------------------
 # Verificação do design
@@ -43,8 +46,6 @@ redirect syn/reports/check_design.rpt {
 # ------------------------------------------------------------
 # Relatórios pré-síntese
 # ------------------------------------------------------------
-
-file mkdir syn/reports
 
 redirect syn/reports/area_pre.rpt {
   report_area -hierarchy
@@ -68,8 +69,6 @@ compile_ultra -no_autoungroup
 # Relatórios pós-síntese
 # ------------------------------------------------------------
 
-file mkdir syn/reports
-
 redirect syn/reports/area_pos.rpt {
   report_area -hierarchy
 }
@@ -90,15 +89,15 @@ redirect syn/reports/setup_violations.rpt {
 # Exportar netlist
 # ------------------------------------------------------------
 
-write -format verilog -hierarchy -output syn/vending_top_syn.v
+write -format verilog -hierarchy -output syn/aes_teste_syn.v
 
-write -format ddc -hierarchy -output syn/vending_top_syn.ddc
+write -format ddc -hierarchy -output syn/aes_teste_syn.ddc
 
 # ------------------------------------------------------------
 # Salvar sessão do DC
 # ------------------------------------------------------------
 
-write_file -format ddc -hierarchy -output syn/vending_top.ddc
+write_file -format ddc -hierarchy -output syn/aes_teste.ddc
 
 puts "\n=================================================="
 puts "SÍNTESE CONCLUÍDA"
@@ -108,6 +107,7 @@ puts "  syn/reports/area_pos.rpt"
 puts "  syn/reports/timing_relatorio.rpt"
 puts "  syn/reports/power.rpt"
 puts "  syn/reports/setup_violations.rpt"
-puts "  syn/vending_top_syn.v"
-puts "  syn/vending_top_syn.ddc"
+puts "  syn/aes_teste_syn.v"
+puts "  syn/aes_teste_syn.ddc"
+puts "  syn/aes_teste.ddc"
 puts "=================================================="
