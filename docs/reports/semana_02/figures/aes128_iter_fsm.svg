@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg
+  PUBLIC '-//W3C//DTD SVG 1.0//EN'
+  'http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd'>
+<svg width="507.27559055118115" height="307" preserveAspectRatio="xMinYMin meet" viewBox="0 0 507 307" xmlns="http://www.w3.org/2000/svg" version="1.0" fill-rule="evenodd" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<title>...</title>
+	<desc>...</desc>
+	<clipPath id="clip">
+		<rect x="0" y="0" width="507.27559055118115" height="307"/>
+	</clipPath>
+	<g id="group" transform="scale(1,-1) translate(0,-307)" style="clip-path: url(#clip)">
+		<g transform="">
+			<rect x="45" y="261" width="417" height="42" rx="5" ry="5" style="stroke: rgb(81%,84%,87%); stroke-linecap: butt; stroke-width: 0.8; fill: rgb(94%,96%,97%); fill-rule: evenodd;"/>
+			<text x="191.104248046875" y="285.0" style="font-family: Arial-Bold; font-size: 9px;fill: rgb(8%,17%,27%); stroke:none;" transform="translate(0,570) scale(1,-1)">rst_n = 0 em qualquer estado</text>
+			<text x="154.4765625" y="272.0" style="font-family: Arial; font-size: 7.5px;fill: rgb(8%,17%,27%); stroke:none;" transform="translate(0,544) scale(1,-1)">IDLE; busy = 0; done = 0; dados, chave e contador zerados</text>
+			<path d="M 125,261 L 125,155 Z" style="stroke: rgb(14%,35%,49%); stroke-linecap: butt; stroke-width: 1;"/>
+			<polygon points="125 155, 127.1748 159.5022, 122.8252 159.5022" style="stroke: rgb(14%,35%,49%); stroke-linecap: butt; stroke-width: 1; fill: rgb(14%,35%,49%); fill-rule: evenodd;"/>
+			<rect x="60" y="100" width="130" height="55" rx="5" ry="5" style="stroke: rgb(81%,84%,87%); stroke-linecap: butt; stroke-width: 0.8; fill: rgb(94%,96%,97%); fill-rule: evenodd;"/>
+			<text x="114.749755859375" y="130.5" style="font-family: Arial-Bold; font-size: 9px;fill: rgb(8%,17%,27%); stroke:none;" transform="translate(0,261) scale(1,-1)">IDLE</text>
+			<text x="110.7196044921875" y="117.5" style="font-family: Arial; font-size: 7.5px;fill: rgb(8%,17%,27%); stroke:none;" transform="translate(0,235) scale(1,-1)">busy = 0</text>
+			<rect x="315" y="100" width="130" height="55" rx="5" ry="5" style="stroke: rgb(81%,84%,87%); stroke-linecap: butt; stroke-width: 0.8; fill: rgb(94%,96%,97%); fill-rule: evenodd;"/>
+			<text x="363.500732421875" y="130.5" style="font-family: Arial-Bold; font-size: 9px;fill: rgb(8%,17%,27%); stroke:none;" transform="translate(0,261) scale(1,-1)">ROUND</text>
+			<text x="349.77294921875" y="117.5" style="font-family: Arial; font-size: 7.5px;fill: rgb(8%,17%,27%); stroke:none;" transform="translate(0,235) scale(1,-1)">busy = 1; r = 1..10</text>
+			<path d="M 155,155 L 155,220 Z" style="stroke: rgb(14%,35%,49%); stroke-linecap: butt; stroke-width: 1;"/>
+			<path d="M 155,220 L 345,220 Z" style="stroke: rgb(14%,35%,49%); stroke-linecap: butt; stroke-width: 1;"/>
+			<path d="M 345,220 L 345,155 Z" style="stroke: rgb(14%,35%,49%); stroke-linecap: butt; stroke-width: 1;"/>
+			<polygon points="345 155, 347.1748 159.5022, 342.8252 159.5022" style="stroke: rgb(14%,35%,49%); stroke-linecap: butt; stroke-width: 1; fill: rgb(14%,35%,49%); fill-rule: evenodd;"/>
+			<text x="214.863525390625" y="239" style="font-family: Arial-Bold; font-size: 9px;fill: rgb(8%,17%,27%); stroke:none;" transform="translate(0,478) scale(1,-1)">T1: start = 1 (E0)</text>
+			<path d="M 60,125 L 20,125 Z" style="stroke: rgb(14%,35%,49%); stroke-linecap: butt; stroke-width: 1;"/>
+			<path d="M 20,125 L 20,175 Z" style="stroke: rgb(14%,35%,49%); stroke-linecap: butt; stroke-width: 1;"/>
+			<path d="M 20,175 L 95,175 Z" style="stroke: rgb(14%,35%,49%); stroke-linecap: butt; stroke-width: 1;"/>
+			<path d="M 95,175 L 95,155 Z" style="stroke: rgb(14%,35%,49%); stroke-linecap: butt; stroke-width: 1;"/>
+			<polygon points="95 155, 97.17483 159.5022, 92.82517 159.5022" style="stroke: rgb(14%,35%,49%); stroke-linecap: butt; stroke-width: 1; fill: rgb(14%,35%,49%); fill-rule: evenodd;"/>
+			<text x="36.546875" y="188" style="font-family: Arial; font-size: 8px;fill: rgb(8%,17%,27%); stroke:none;" transform="translate(0,376) scale(1,-1)">T0: start = 0</text>
+			<path d="M 445,125 L 485,125 Z" style="stroke: rgb(14%,35%,49%); stroke-linecap: butt; stroke-width: 1;"/>
+			<path d="M 485,125 L 485,80 Z" style="stroke: rgb(14%,35%,49%); stroke-linecap: butt; stroke-width: 1;"/>
+			<path d="M 485,80 L 400,80 Z" style="stroke: rgb(14%,35%,49%); stroke-linecap: butt; stroke-width: 1;"/>
+			<path d="M 400,80 L 400,100 Z" style="stroke: rgb(14%,35%,49%); stroke-linecap: butt; stroke-width: 1;"/>
+			<polygon points="400 100, 397.8252 95.49776, 402.1748 95.49776" style="stroke: rgb(14%,35%,49%); stroke-linecap: butt; stroke-width: 1; fill: rgb(14%,35%,49%); fill-rule: evenodd;"/>
+			<text x="387.986328125" y="64" style="font-family: Arial; font-size: 8px;fill: rgb(8%,17%,27%); stroke:none;" transform="translate(0,128) scale(1,-1)">T2: r &lt; 10 (E1..E9)</text>
+			<path d="M 315,125 L 250,125 Z" style="stroke: rgb(14%,35%,49%); stroke-linecap: butt; stroke-width: 1;"/>
+			<path d="M 250,125 L 250,50 Z" style="stroke: rgb(14%,35%,49%); stroke-linecap: butt; stroke-width: 1;"/>
+			<path d="M 250,50 L 125,50 Z" style="stroke: rgb(14%,35%,49%); stroke-linecap: butt; stroke-width: 1;"/>
+			<path d="M 125,50 L 125,100 Z" style="stroke: rgb(14%,35%,49%); stroke-linecap: butt; stroke-width: 1;"/>
+			<polygon points="125 100, 122.8252 95.49776, 127.1748 95.49776" style="stroke: rgb(14%,35%,49%); stroke-linecap: butt; stroke-width: 1; fill: rgb(14%,35%,49%); fill-rule: evenodd;"/>
+			<text x="158.860595703125" y="32" style="font-family: Arial-Bold; font-size: 9px;fill: rgb(8%,17%,27%); stroke:none;" transform="translate(0,64) scale(1,-1)">T3: r = 10 (E10)</text>
+			<text x="136.279296875" y="8" style="font-family: Arial; font-size: 8px;fill: rgb(8%,17%,27%); stroke:none;" transform="translate(0,16) scale(1,-1)">Transições na subida de clk_sys; reset com asserção assíncrona.</text>
+		</g>
+	</g>
+</svg>

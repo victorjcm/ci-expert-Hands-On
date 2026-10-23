@@ -3,3 +3,6 @@ libs/
 
 #arquivos de configuração
 .vscode/
+
+#arquivos pessoais e notas
+pessoal/
