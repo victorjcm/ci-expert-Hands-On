@@ -6,3 +6,19 @@ libs/
 
 #arquivos pessoais e notas
 pessoal/
+tmp/pdfs/
+
+# Resultados gerados pelo fluxo MiniSoC
+tb/build/
+syn/reports/
+syn/output/
+syn/work/
+syn/alib/
+syn/command.log
+syn/filenames.log
+syn/minisoc_top_syn.v
+syn/minisoc_top_syn.ddc
+syn/minisoc_top.ddc
+
+
+

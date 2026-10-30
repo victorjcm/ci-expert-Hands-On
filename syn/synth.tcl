@@ -1,12 +1,13 @@
 # ============================================================
 # Script de Síntese
 # ============================================================
+# Executar a partir da raiz do repositório.
 
 # ------------------------------------------------------------
 # Carregar configuração
 # ------------------------------------------------------------
 
-set search_path [list . .. /libs]
+set search_path [list . .. ./libs]
 set target_library "saed32rvt_tt1v25c.db"
 set link_library "* $target_library"
 
@@ -14,13 +15,19 @@ set link_library "* $target_library"
 # Ler RTL
 # ------------------------------------------------------------
 
-analyze -format sverilog rtl/aes_teste.sv
+analyze -format sverilog {
+  rtl/minisoc_aes/minisoc_aes_sbox.sv
+  rtl/minisoc_aes/minisoc_aes_sub_bytes.sv
+  rtl/minisoc_aes/minisoc_aes_shift_rows.sv
+  rtl/minisoc_top.sv
+}
 
 # ------------------------------------------------------------
 # Elaborar
 # ------------------------------------------------------------
 
-elaborate aes_teste
+# minisoc_top.sv ainda é um marcador; implementar a integração antes da síntese.
+#elaborate minisoc_top
 
 link
 
@@ -28,7 +35,8 @@ link
 # Constraints
 # ------------------------------------------------------------
 
-#read_sdc syn/aes_teste.sdc
+# Criar e habilitar o SDC antes de avaliar o timing do MiniSoC.
+#read_sdc syn/minisoc_top.sdc
 
 # ------------------------------------------------------------
 # Verificação do design
@@ -89,15 +97,15 @@ redirect syn/reports/setup_violations.rpt {
 # Exportar netlist
 # ------------------------------------------------------------
 
-write -format verilog -hierarchy -output syn/aes_teste_syn.v
+write -format verilog -hierarchy -output syn/minisoc_top_syn.v
 
-write -format ddc -hierarchy -output syn/aes_teste_syn.ddc
+write -format ddc -hierarchy -output syn/minisoc_top_syn.ddc
 
 # ------------------------------------------------------------
 # Salvar sessão do DC
 # ------------------------------------------------------------
 
-write_file -format ddc -hierarchy -output syn/aes_teste.ddc
+write_file -format ddc -hierarchy -output syn/minisoc_top.ddc
 
 puts "\n=================================================="
 puts "SÍNTESE CONCLUÍDA"
@@ -107,7 +115,7 @@ puts "  syn/reports/area_pos.rpt"
 puts "  syn/reports/timing_relatorio.rpt"
 puts "  syn/reports/power.rpt"
 puts "  syn/reports/setup_violations.rpt"
-puts "  syn/aes_teste_syn.v"
-puts "  syn/aes_teste_syn.ddc"
-puts "  syn/aes_teste.ddc"
+puts "  syn/minisoc_top_syn.v"
+puts "  syn/minisoc_top_syn.ddc"
+puts "  syn/minisoc_top.ddc"
 puts "=================================================="
