@@ -19,6 +19,9 @@ syn/filenames.log
 syn/minisoc_top_syn.v
 syn/minisoc_top_syn.ddc
 syn/minisoc_top.ddc
+syn/minisoc_aes_sbox_syn.v
+syn/minisoc_aes_sbox_syn.ddc
+syn/minisoc_aes_sbox.ddc
 
 
 

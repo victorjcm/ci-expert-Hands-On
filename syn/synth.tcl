@@ -29,7 +29,7 @@ analyze -format sverilog {
 # minisoc_top.sv ainda é um marcador; implementar a integração antes da síntese.
 #elaborate minisoc_top
 
-link
+#link
 
 # ------------------------------------------------------------
 # Constraints

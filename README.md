@@ -38,8 +38,8 @@ projeto; a referência passa a ser o Block Guide v1.0.0.
 
 O modelo de teste anterior e seu testbench foram removidos. A simulação atual
 usa `tb_minisoc_aes_semana_02`, sem depender do futuro testbench do sistema.
-A síntese continua configurada para `minisoc_top`, cuja implementação ainda
-está pendente.
+A síntese está configurada para `minisoc_aes_sbox` isoladamente, enquanto
+`minisoc_aes_top` ainda não está implementado.
 
 As pastas locais auxiliares `libs/`, `pessoal/` e `output/` foram preservadas;
 não fazem parte da estrutura de blocos do MiniSoC.
@@ -60,18 +60,19 @@ explicitamente a essas listas. `PKG_FILES` está vazio nesta etapa.
 `make synth` chama diretamente `dc_shell -f syn/synth.tcl`. O Tcl mantém o
 padrão original: configuração, leitura explícita do RTL, `elaborate`, `link`,
 constraints, verificação, relatórios, `compile_ultra` e exportação.
-O topo é `minisoc_top` e a biblioteca é `saed32rvt_tt1v25c.db`, buscada em
+O topo é `minisoc_aes_sbox` e a biblioteca é `saed32rvt_tt1v25c.db`, buscada em
 `./libs`. Ajustes de biblioteca, fontes e topo são feitos diretamente no Tcl.
 A biblioteca foi mantida da configuração anterior; a tecnologia alvo ainda
 deverá ser confirmada para o novo projeto.
 
-A síntese do sistema depende da implementação de `minisoc_top` e dos demais
-blocos. A chamada `read_sdc syn/minisoc_top.sdc` permanece comentada, como no
-padrão original; criar e habilitar o SDC antes de avaliar o timing.
+O Tcl lê apenas `rtl/minisoc_aes/minisoc_aes_sbox.sv`. Os relatórios se referem
+à S-box isolada. A chamada `read_sdc syn/minisoc_aes_sbox.sdc` permanece
+comentada, como no padrão original; criar e habilitar constraints de entrada
+e saída antes de avaliar o timing desse bloco combinacional, que não tem clock próprio.
 
 As saídas de simulação ficam na raiz do repositório, como no fluxo original.
 Relatórios de síntese ficam em `syn/reports/`; netlist e arquivos DDC ficam
-diretamente em `syn/`, com o prefixo `minisoc_top`.
+diretamente em `syn/`, com o prefixo `minisoc_aes_sbox`.
 `clean_sim` remove apenas a simulação, e `clean_synth` remove apenas os
 resultados e diretórios de trabalho da síntese. `make clean` executa ambos.
 

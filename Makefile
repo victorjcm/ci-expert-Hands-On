@@ -66,7 +66,7 @@ wave:
 # ==========================================
 # Síntese
 # ==========================================
-# O Tcl usa minisoc_top; a integração e o SDC ainda estão pendentes.
+# O Tcl sintetiza minisoc_aes_sbox isoladamente; o SDC ainda está pendente.
 synth:
 	dc_shell -f $(SYN_DIR)/synth.tcl
 
@@ -84,6 +84,9 @@ clean_synth:
 		$(SYN_DIR)/alib
 	rm -f \
 		default.svf \
+		$(SYN_DIR)/minisoc_aes_sbox_syn.v \
+		$(SYN_DIR)/minisoc_aes_sbox_syn.ddc \
+		$(SYN_DIR)/minisoc_aes_sbox.ddc \
 		$(SYN_DIR)/minisoc_top_syn.v \
 		$(SYN_DIR)/minisoc_top_syn.ddc \
 		$(SYN_DIR)/minisoc_top.ddc \
