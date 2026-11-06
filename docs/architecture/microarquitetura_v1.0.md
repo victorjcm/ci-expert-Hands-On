@@ -1,48 +1,22 @@
 # MiniSoC AES — Microarquitetura v1.0
 
-Referência: [Block Guide v1.0.0](../reports/Resumos/DV_BlockGuide_MiniSoCAES_v1.0.0.pdf),
-seções 1–11. As escolhas internas abaixo são propostas de implementação;
-não alteram interfaces de topo, mapa de registradores ou protocolo.
-Nesta semana, somente as transformações combinacionais de rodada têm RTL.
-
 ## 1. Organização interna
 
 ```mermaid
-graph TD;
-    n_host["Mestre SPI"];
-    n_rx["minisoc_spi - RX/TX em spi_sclk"];
-    n_cfg["minisoc_spi - registros em clk always-on"];
-    n_pll["minisoc_pll_mock"];
-    n_rst["minisoc_top - reset do sistema"];
-    n_aes["minisoc_aes_top - FSM e modos"];
-    n_key["minisoc_aes_key_exp - K0 a K10"];
-    n_dp["minisoc_aes_dp - estado e rodada iterativa"];
-    n_arb["minisoc_top - ownership e clock do porto"];
-    n_ext["MEMORY DATA em mem_clk"];
-    n_mem["minisoc_memory - 1024 x 32 single-port"];
-
-    n_host -->|MOSI| n_rx;
-    n_rx -->|MISO| n_host;
-    n_rx -->|frame por mailbox e toggle| n_cfg;
-    n_cfg -->|resposta e ack| n_rx;
-    n_cfg -->|controle do PLL| n_pll;
-    n_pll -->|sys_clk e locked| n_rst;
-    n_cfg -->|snapshot e START| n_aes;
-    n_aes -->|status por handshake| n_cfg;
-    n_rst -->|sys_rst_n| n_aes;
-    n_aes -->|start e chave| n_key;
-    n_key -->|busy e done| n_aes;
-    n_key -->|chave de rodada| n_dp;
-    n_dp -->|indice da chave| n_key;
-    n_aes -->|start e entrada| n_dp;
-    n_dp -->|busy, done e resultado| n_aes;
-    n_aes -->|endereco e escrita| n_arb;
-    n_arb -->|leitura| n_aes;
-    n_ext -->|endereco e escrita| n_arb;
-    n_arb -->|leitura| n_ext;
-    n_cfg -->|MEM_SEL_AES| n_arb;
-    n_arb -->|sinais do porto| n_mem;
-    n_mem -->|dado lido| n_arb;
+flowchart LR
+    HOST["Mestre SPI"] <--> RX["minisoc_spi: RX/TX em spi_sclk"]
+    RX <-->|"mailboxes e toggles"| CFG["minisoc_spi: registros em clk always-on"]
+    CFG --> PLL["minisoc_pll_mock"]
+    PLL -->|"sys_clk e locked"| RST["minisoc_top: reset do sistema"]
+    CFG <-->|"comando/configuração e status com handshake"| AES["minisoc_aes_top: FSM e modos"]
+    RST --> AES
+    AES <-->|"start, busy e done"| KEY["minisoc_aes_key_exp: K0..K10"]
+    KEY <-->|"chave e índice"| DP["minisoc_aes_dp: estado e rodada iterativa"]
+    AES <--> DP
+    AES <-->|"endereço, escrita e retorno de leitura"| ARB["minisoc_top: ownership e seleção segura do porto"]
+    EXT["MEMORY DATA em mem_clk"] <--> ARB
+    CFG -->|"MEM_SEL_AES"| ARB
+    ARB <--> MEM["minisoc_memory: 1024 x 32, single-port"]
 ```
 
 `minisoc_top.sv` conectará os blocos, reset e seleção do porto. Permanecem
@@ -89,31 +63,13 @@ reduzindo replicação em relação a dez rodadas desenroladas. Caminhos direto 
 inverso separados simplificam controle e verificação nesta versão.
 
 ```mermaid
-graph TD;
-    dp_state["state_q"];
-    dp_sub["SubBytes"];
-    dp_shift["ShiftRows"];
-    dp_mix["MixColumns ou bypass"];
-    dp_add["XOR Kr - cifra"];
-    dp_inv_shift["InvShiftRows"];
-    dp_inv_sub["InvSubBytes"];
-    dp_inv_add["XOR Kr - inversa"];
-    dp_inv_mix["InvMixColumns ou bypass"];
-    dp_init["Entrada XOR K0 ou K10"];
-    dp_mux["Selecao do proximo estado"];
-
-    dp_state --> dp_sub;
-    dp_sub --> dp_shift;
-    dp_shift --> dp_mix;
-    dp_mix --> dp_add;
-    dp_state --> dp_inv_shift;
-    dp_inv_shift --> dp_inv_sub;
-    dp_inv_sub --> dp_inv_add;
-    dp_inv_add --> dp_inv_mix;
-    dp_add --> dp_mux;
-    dp_inv_mix --> dp_mux;
-    dp_init --> dp_mux;
-    dp_mux -->|proxima borda de clock| dp_state;
+flowchart LR
+    Q["state_q"] --> SB["SubBytes"] --> SR["ShiftRows"] --> MC["MixColumns ou bypass"] --> AK["XOR Kr"]
+    Q --> ISR["InvShiftRows"] --> ISB["InvSubBytes"] --> IAK["XOR Kr"] --> IMC["InvMixColumns ou bypass"]
+    AK --> MUX["seleção do próximo estado"]
+    IMC --> MUX
+    INIT["entrada XOR K0 ou K10"] --> MUX
+    MUX --> Q
 ```
 
 | Fase | Cifra | Cifra inversa convencional |
@@ -165,41 +121,26 @@ com revisão da latência. Não há resultados de área, potência ou timing.
 ## 3. FSM proposta de `minisoc_aes_top`
 
 ```mermaid
-graph TD;
-    st_reset["Reset"];
-    st_idle["IDLE"];
-    st_check["CHECK"];
-    st_key_init["KEY_INIT"];
-    st_key_expand["KEY_EXPAND"];
-    st_read_req["READ_REQ"];
-    st_read_capture["READ_CAPTURE"];
-    st_prepare["PREPARE"];
-    st_aes_init["AES_INIT"];
-    st_aes_round["AES_ROUND"];
-    st_postprocess["POSTPROCESS"];
-    st_write_word["WRITE_WORD"];
-    st_next_block["NEXT_BLOCK"];
-    st_complete["COMPLETE"];
-
-    st_reset --> st_idle;
-    st_idle -->|START e snapshot| st_check;
-    st_check -->|invalida - ERROR| st_idle;
-    st_check -->|configuracao valida| st_key_init;
-    st_key_init --> st_key_expand;
-    st_key_expand -->|done da expansao| st_read_req;
-    st_read_req --> st_read_capture;
-    st_read_capture -->|proxima palavra| st_read_req;
-    st_read_capture -->|quatro palavras lidas| st_prepare;
-    st_prepare --> st_aes_init;
-    st_aes_init -->|start aceito pelo datapath| st_aes_round;
-    st_aes_round -->|done do datapath = 0| st_aes_round;
-    st_aes_round -->|done do datapath = 1| st_postprocess;
-    st_postprocess --> st_write_word;
-    st_write_word -->|palavras 0 a 2| st_write_word;
-    st_write_word -->|palavra 3 gravada| st_next_block;
-    st_next_block -->|ha outro bloco| st_read_req;
-    st_next_block -->|ultimo bloco| st_complete;
-    st_complete --> st_idle;
+stateDiagram-v2
+    [*] --> IDLE
+    IDLE --> CHECK: START recebido e snapshot capturado
+    CHECK --> IDLE: configuração inválida / ERROR
+    CHECK --> KEY_INIT: configuração válida
+    KEY_INIT --> KEY_EXPAND
+    KEY_EXPAND --> READ_REQ: done da expansão
+    READ_REQ --> READ_CAPTURE
+    READ_CAPTURE --> READ_REQ: próxima palavra
+    READ_CAPTURE --> PREPARE: quatro palavras lidas
+    PREPARE --> AES_INIT
+    AES_INIT --> AES_ROUND: start aceito pelo datapath
+    AES_ROUND --> AES_ROUND: done do datapath = 0
+    AES_ROUND --> POSTPROCESS: done do datapath = 1
+    POSTPROCESS --> WRITE_WORD
+    WRITE_WORD --> WRITE_WORD: palavras 0 a 2
+    WRITE_WORD --> NEXT_BLOCK: palavra 3 gravada
+    NEXT_BLOCK --> READ_REQ: há outro bloco
+    NEXT_BLOCK --> COMPLETE: último bloco
+    COMPLETE --> IDLE
 ```
 
 Ao aceitar a solicitação, o engine captura KEY, IV, COUNTER, MODE, DECRYPT e
@@ -370,7 +311,7 @@ registradores ao guia, ainda precisa ser acordada com o verificador.
 Alterações de PLL ou owner durante BUSY estão fora da sequência normal; definir a política
 defensiva na integração.
 
-## 7. Registradores preservados e defesa
+## 7. Registradores preservados
 
 | Endereço | Registro | Campos relevantes |
 | --- | --- | --- |
@@ -384,33 +325,3 @@ defensiva na integração.
 | 0x0E | SYSTEM_CONTROL | PLL_DIV_SEL[3:2], PLL_ENABLE[1], MEM_SEL_AES[0] |
 | 0x0F | SYSTEM_STATUS | PLL_LOCKED[0] |
 | 0x3F | NOP | Fase de retorno de leitura |
-
-Defesa: apresentar organização, acompanhar rodadas direta/inversa, explicar
-in-place, percorrer FSM e desenhar bordas de req/ack e liberação de reset.
-Confirmar START/status, CFB-128, overflow CTR, Read SPI, VERSION, handoff da
-memória e perda de lock. Aprovação do instrutor e apresentação ao parceiro
-**permanecem pendentes**.
-
-## 8. Coerência com a entrega e limites da revisão
-
-O Makefile lista os nove módulos acima e somente
-`tb/tb_minisoc_aes_semana_03.sv`. O testbench é autossuficiente, sem pacote
-de referência: prepara 8 comparações do Apêndice B (inicialização, rodadas
-1 e 10) e 40 de C.1 (inicialização e dez rodadas inversas), totalizando 48.
-As entradas intermediárias são fixas e independentes da saída de outro DUT.
-Isso verifica as transformações isoladas; não demonstra controle de rodadas,
-expansão de chave, modos, CDC, reset ou timing do futuro sistema.
-
-A revisão por leitura não identificou divergências nas larguras, na ordem
-dos bytes, nas equações de MixColumns/InvMixColumns ou no uso de chaves fixas
-do testbench. Não substitui compilação, simulação ou lint; a indicação
-esperada `SEMANA_03_PASS checks=48` ainda depende da execução pelo usuário.
-
-O roteiro herdado `syn/synth.tcl` referencia `rtl/minisoc_top.sv`, ausente,
-e tem elaboração, link e SDC comentados. A síntese integrada permanece
-pendente e não pode ser considerada um fluxo pronto desta semana.
-
-Pontos ainda sujeitos à aprovação: políticas de START/status, alinhamento
-do retorno SPI, segmento CFB, contador CTR, confirmação externa da troca de
-owner e status após perda de lock. O documento define a proposta interna,
-mas não declara essas escolhas como exigências já fixadas pelo Block Guide.
