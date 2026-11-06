@@ -1,8 +1,8 @@
 `timescale 1ns/1ps
 `default_nettype none
 
-// Byte n = state[127 - 8*n -: 8] = s[n % 4][n / 4].
-// Sixteen independent forward S-box instances; no state or handshake.
+// O byte n ocupa state[127 - 8*n -: 8] e representa s[n % 4][n / 4].
+// Dezesseis S-boxes diretas independentes, sem registradores ou handshake.
 module minisoc_aes_sub_bytes (
     input  wire [127:0] i_state,
     output wire [127:0] o_state

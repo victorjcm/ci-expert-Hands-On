@@ -12,17 +12,23 @@ PKG_FILES =
 
 RTL_FILES = $(RTL_DIR)/minisoc_aes/minisoc_aes_sbox.sv \
 			$(RTL_DIR)/minisoc_aes/minisoc_aes_sub_bytes.sv \
-			$(RTL_DIR)/minisoc_aes/minisoc_aes_shift_rows.sv
+			$(RTL_DIR)/minisoc_aes/minisoc_aes_shift_rows.sv \
+			$(RTL_DIR)/minisoc_aes/minisoc_aes_mix_columns.sv \
+			$(RTL_DIR)/minisoc_aes/minisoc_aes_add_round_key.sv \
+			$(RTL_DIR)/minisoc_aes/minisoc_aes_inv_sbox.sv \
+			$(RTL_DIR)/minisoc_aes/minisoc_aes_inv_sub_bytes.sv \
+			$(RTL_DIR)/minisoc_aes/minisoc_aes_inv_shift_rows.sv \
+			$(RTL_DIR)/minisoc_aes/minisoc_aes_inv_mix_columns.sv
 
-TB_FILES = $(TB_DIR)/tb_minisoc_aes_semana_02.sv
+TB_FILES = $(TB_DIR)/tb_minisoc_aes_semana_03.sv
 
 # ==========================================
 # Top do testbench
 # ==========================================
-TOP = tb_minisoc_aes_semana_02
+TOP = tb_minisoc_aes_semana_03
 
 # ==========================================
-# Flags
+# Flags das ferramentas
 # ==========================================
 TIMESCALE = 1ns/1ps
 
@@ -66,7 +72,7 @@ wave:
 # ==========================================
 # Síntese
 # ==========================================
-# O Tcl sintetiza minisoc_aes_sbox isoladamente; o SDC ainda está pendente.
+# O Tcl de integração ainda requer minisoc_top, elaboração e constraints.
 synth:
 	dc_shell -f $(SYN_DIR)/synth.tcl
 

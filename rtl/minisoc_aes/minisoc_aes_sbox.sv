@@ -1,14 +1,14 @@
 `timescale 1ns/1ps
 `default_nettype none
 
-// AES forward S-box: inverse in GF(2^8), then affine transformation.
-// FIPS-197, sections 4.2 and 5.1.1. No clock, reset or storage.
+// S-box direta do AES: inversão em GF(2^8), seguida da transformação afim.
+// FIPS-197, seções 4.2 e 5.1.1. Sem clock, reset ou armazenamento.
 module minisoc_aes_sbox (
     input  wire [7:0] i_byte,
     output wire [7:0] o_byte
 );
-    // Reduction polynomial: x^8 + x^4 + x^3 + x + 1 (0x11b).
-    // Fixed loop bounds allow synthesis into combinational logic.
+    // Polinômio de redução: x^8 + x^4 + x^3 + x + 1 (0x11b).
+    // Laços com limites fixos permitem a síntese como lógica combinacional.
     function automatic logic [7:0] gf_multiply (
         input logic [7:0] a,
         input logic [7:0] b
@@ -41,12 +41,13 @@ module minisoc_aes_sbox (
     assign x64  = gf_multiply(x32, x32);
     assign x128 = gf_multiply(x64, x64);
 
-    // a^-1 = a^254 for a != 0; this expression also maps 0 to 0.
+    // a^-1 = a^254 para a != 0; esta expressão também mapeia 0 em 0.
     assign inverse = gf_multiply(
         gf_multiply(gf_multiply(x2, x4), gf_multiply(x8, x16)),
         gf_multiply(x32, gf_multiply(x64, x128))
     );
 
+    // Transformação afim; rotl indica rotação de bits para a esquerda.
     // b = a ^ rotl(a,1) ^ rotl(a,2) ^ rotl(a,3) ^ rotl(a,4) ^ 0x63.
     assign o_byte = inverse
                   ^ {inverse[6:0], inverse[7]}

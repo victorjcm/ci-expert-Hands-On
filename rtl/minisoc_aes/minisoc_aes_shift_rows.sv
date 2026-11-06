@@ -1,13 +1,13 @@
 `timescale 1ns/1ps
 `default_nettype none
 
-// Forward ShiftRows: s_out[r][c] = s_in[r][(c+r) % 4].
-// Column-major serialization; only static wiring, no shifter or storage.
+// ShiftRows direto: s_out[r][c] = s_in[r][(c+r) % 4].
+// Serialização por colunas; apenas conexões fixas, sem deslocador ou armazenamento.
 module minisoc_aes_shift_rows (
     input  wire [127:0] i_state,
     output wire [127:0] o_state
 );
-    // Output byte order: 0,5,10,15, 4,9,14,3, 8,13,2,7, 12,1,6,11.
+    // Ordem dos bytes de entrada na saída: 0,5,10,15, 4,9,14,3, 8,13,2,7, 12,1,6,11.
     assign o_state = {
         i_state[127:120], i_state[87:80], i_state[47:40], i_state[7:0],
         i_state[95:88], i_state[55:48], i_state[15:8], i_state[103:96],

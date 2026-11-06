@@ -6,8 +6,8 @@ libs/
 
 #arquivos pessoais e notas
 pessoal/
-tmp/pdfs/
-
+tmp/
+AGENTS.md
 # Resultados gerados pelo fluxo MiniSoC
 tb/build/
 syn/reports/

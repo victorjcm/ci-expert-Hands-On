@@ -11,8 +11,8 @@ module tb_minisoc_aes_semana_02;
     wire [127:0] shift_out;
     int unsigned checks = 0;
 
-    // Independent reference: FIPS-197 (2001), Figure 7, rows 0..f.
-    // RTL uses GF arithmetic and does not import this lookup table.
+    // Referência independente: FIPS-197 (2001), Figura 7, linhas 0..f.
+    // O RTL usa aritmética de campo finito e não importa esta tabela de consulta.
     localparam logic [2047:0] SBOX_REFERENCE = {
         128'h637c777bf26b6fc53001672bfed7ab76,
         128'hca82c97dfa5947f0add4a2af9ca472c0,
@@ -47,7 +47,7 @@ module tb_minisoc_aes_semana_02;
         end
     endfunction
 
-    // Matrix-based reference, separate from the explicit RTL concatenation.
+    // Referência por índices de matriz, independente da concatenação explícita do RTL.
     function automatic logic [127:0] ref_shift_rows(input logic [127:0] value);
         for (int row = 0; row < 4; row++) begin
             for (int col = 0; col < 4; col++) begin
@@ -75,7 +75,7 @@ module tb_minisoc_aes_semana_02;
         input logic [127:0] after_shift_rows
     );
         state_in = start_state;
-        // Isolated ShiftRows uses the published state, not the DUT SubBytes.
+        // ShiftRows isolado recebe o estado publicado, sem depender do SubBytes do DUT.
         shift_in = after_sub_bytes;
         #1;
         check_state($sformatf("round %0d SubBytes", round_number), sub_out, after_sub_bytes);
@@ -101,8 +101,8 @@ module tb_minisoc_aes_semana_02;
         end
         $display("PASS S-box: 256/256 inputs (includes 00->63 and 53->ed)");
 
-        // Every lane receives every byte value, with unequal adjacent lanes.
-        // This also detects duplicated, swapped or unconnected S-box lanes.
+        // Cada posição recebe todos os valores de byte; posições vizinhas diferem.
+        // Isso também detecta posições de S-box duplicadas, trocadas ou desconectadas.
         for (int value = 0; value < 256; value++) begin
             for (int lane = 0; lane < 16; lane++) begin
                 state_in[127 - 8*lane -: 8] = 8'(value + lane);
@@ -120,7 +120,7 @@ module tb_minisoc_aes_semana_02;
         #1;
         check_state("ShiftRows tagged bytes", shift_out,
                     128'h00050a0f04090e03080d02070c01060b);
-        // Every input bit is exercised independently to check the wiring.
+        // Cada bit de entrada é exercitado isoladamente para conferir as conexões.
         for (int bit_index = 0; bit_index < 128; bit_index++) begin
             shift_in = 128'h1 << bit_index;
             #1;
@@ -129,9 +129,9 @@ module tb_minisoc_aes_semana_02;
         end
         $display("PASS ShiftRows: tagged bytes and 128 one-hot inputs");
 
-        // FIPS-197 (2001), Appendix B, printed pages 33-34.
-        // Plaintext 3243f6a8885a308d313198a2e0370734;
-        // key       2b7e151628aed2a6abf7158809cf4f3c.
+        // FIPS-197 (2001), Apêndice B, páginas impressas 33-34.
+        // Texto claro: 3243f6a8885a308d313198a2e0370734;
+        // chave:       2b7e151628aed2a6abf7158809cf4f3c.
         check_round(1,
             128'h193de3bea0f4e22b9ac68d2ae9f84808,
             128'hd42711aee0bf98f1b8b45de51e415230,

@@ -2,6 +2,8 @@
 # Script de Síntese
 # ============================================================
 # Executar a partir da raiz do repositório.
+# Fluxo de integração pendente: minisoc_top.sv ainda não existe nesta entrega.
+# Preparar fontes, elaboração, link e SDC antes de utilizar este roteiro.
 
 # ------------------------------------------------------------
 # Carregar configuração
@@ -26,7 +28,7 @@ analyze -format sverilog {
 # Elaborar
 # ------------------------------------------------------------
 
-# minisoc_top.sv ainda é um marcador; implementar a integração antes da síntese.
+# Implementar minisoc_top.sv e habilitar elaboração/link antes da síntese.
 #elaborate minisoc_top
 
 #link
