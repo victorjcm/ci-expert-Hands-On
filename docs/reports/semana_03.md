@@ -4,7 +4,8 @@
 
 **Branch:** `w03-rtl-v1.0`
 
-**Estado:** arquivos preparados; execução manual e aceite pendentes.
+**Estado:** simulação executada pelo usuário, com 48 comparações aprovadas;
+lint executado com 11 avisos no testbench; aceite do instrutor pendente.
 
 ## Material elaborado
 
@@ -34,11 +35,11 @@ byte `n` em `[127-8*n -: 8]`.
 Testbench: `tb/tb_minisoc_aes_semana_03.sv`. Os valores de entrada, chaves
 de rodada e saídas esperadas estão declarados no próprio testbench.
 
-| Grupo | Comparações previstas | Situação |
+| Grupo | Comparações executadas | Situação |
 | --- | ---: | --- |
-| B: AddRoundKey inicial e transformações isoladas das rodadas 1 e 10 | 8 | Não executado |
-| C.1: AddRoundKey inicial e transformações isoladas das dez rodadas inversas | 40 | Não executado |
-| **Total** | **48** | **Resultado pendente** |
+| B: AddRoundKey inicial e transformações isoladas das rodadas 1 e 10 | 8 | PASS |
+| C.1: AddRoundKey inicial e transformações isoladas das dez rodadas inversas | 40 | PASS |
+| **Total** | **48** | **PASS** |
 
 Os vetores seguem a **FIPS-197 de 2001**. Em B, comparam-se SubBytes,
 ShiftRows, MixColumns e AddRoundKey na rodada 1; na rodada 10, não se aplica
@@ -51,7 +52,17 @@ depender da saída calculada por outro módulo.
 As S-boxes são exercitadas pelas instâncias de SubBytes/InvSubBytes.
 O testbench não contém modelo genérico, varreduras exaustivas ou composição
 de um cifrador completo. Falhas de comparação e timeout usam `$fatal(1, ...)`.
-O marcador esperado ao executar `make run` é `SEMANA_03_PASS checks=48`.
+Na execução realizada pelo usuário em **06/11/2026**, o VCS
+**X-2025.06-SP2_Full64** apresentou `SEMANA_03_PASS checks=48`.
+A simulação encerrou normalmente com `$finish`, em **48000 ps (48 ns)**,
+conforme o print fornecido pelo usuário.
+
+O log de lint fornecido apresenta **11 avisos `Lint-[NS]` (Null statement)**,
+todos em `tb/tb_minisoc_aes_semana_03.sv`: dez referentes a `#1;`, usados
+para aguardar a estabilização combinacional, e um referente a `#10000;`,
+usado pelo watchdog de timeout. Não há erros nem avisos nos módulos RTL
+no trecho apresentado. Os avisos do testbench permanecem na versão executada;
+o resultado não deve ser descrito como lint sem avisos.
 
 | Vetor | Entrada | Chave | Saída esperada |
 | --- | --- | --- | --- |
@@ -79,12 +90,12 @@ têm DUT nesta entrega; a microarquitetura descreve a integração proposta.
 
 ## Critérios de aceite
 
-| Critério | Evidência preparada | Estado |
+| Critério | Evidência | Estado |
 | --- | --- | --- |
 | Microarquitetura v1.0 | Documento em `docs/architecture/` | Preparado, aprovação pendente |
-| RTL direto e inverso | Nove módulos combinacionais | Preparado, validação pendente |
-| Intermediários B e C.1 | Vetores e comparações no testbench | Execução pendente |
-| Lint sem erros | `make syntax` com `+lint=all` | Execução/análise pendentes |
+| RTL direto e inverso | Nove módulos combinacionais exercitados pelo testbench | Aprovado nas comparações cobertas |
+| Intermediários B e C.1 | Print da execução: `SEMANA_03_PASS checks=48` | 48 comparações aprovadas |
+| Lint sem erros | Log de lint fornecido pelo usuário | Sem erros no trecho apresentado; 11 avisos `Lint-[NS]` no testbench |
 
 
 Referências: Block Guide v1.0.0, seções 4.2, 5.3, 6–8 e 10;
