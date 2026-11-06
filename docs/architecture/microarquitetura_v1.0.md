@@ -90,7 +90,9 @@ Os nove módulos entregues são combinacionais, sem clock/reset/armazenamento.
 Os sinais sequenciais descritos acima pertencerão aos módulos futuros de
 controle/datapath. Não são portas dos nove módulos combinacionais entregues.
 
-A S-box algébrica forma um caminho longo. **Uma rodada/ciclo é uma decisão
+A S-box direta consulta a tabela da FIPS-197 (Figura 7) por um `case`
+combinacional de 256 entradas. A S-box inversa mantém a implementação
+algébrica, que pode formar um caminho longo. **Uma rodada/ciclo é uma decisão
 funcional, não timing comprovado**: nem 250 MHz nem 2 GHz foram demonstrados.
 Síntese futura poderá exigir S-box otimizada ou subdivisão das rodadas,
 com revisão da latência. Não há resultados de área, potência ou timing.

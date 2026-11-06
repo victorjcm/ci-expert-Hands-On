@@ -11,8 +11,8 @@ module tb_minisoc_aes_semana_02;
     wire [127:0] shift_out;
     int unsigned checks = 0;
 
-    // Referência independente: FIPS-197 (2001), Figura 7, linhas 0..f.
-    // O RTL usa aritmética de campo finito e não importa esta tabela de consulta.
+    // Referência local: FIPS-197 (2001), Figura 7, linhas 0..f.
+    // Mantida no TB sem importar a implementação ou os valores do módulo RTL.
     localparam logic [2047:0] SBOX_REFERENCE = {
         128'h637c777bf26b6fc53001672bfed7ab76,
         128'hca82c97dfa5947f0add4a2af9ca472c0,

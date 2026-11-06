@@ -3,13 +3,35 @@
 
 module tb_minisoc_aes_semana_03;
     // Semana 3: transformações isoladas contra valores intermediários fixos
-    // da FIPS-197 (2001). Todas as referências ficam neste testbench.
+    // da FIPS-197 (2001), seguidas de uma demonstração encadeada de ida e volta.
+    // Todas as referências ficam neste testbench; as chaves não são calculadas.
     logic [127:0] state_in, key_in;
     wire [127:0] sub_out, inv_sub_out, shift_out, inv_shift_out;
     wire [127:0] mix_out, inv_mix_out, add_out;
     int unsigned checks = 0;
     // Apêndice B: 1 + 4 + 3 = 8; Apêndice C.1: 1 + 9*4 + 3 = 40.
-    localparam int EXPECTED_CHECKS = 48;
+    localparam int EXPECTED_ISOLATED_CHECKS = 48;
+    // Ida e volta: ciphertext contra a FIPS e plaintext recuperado contra o original.
+    localparam int EXPECTED_ROUND_TRIP_CHECKS = 2;
+    localparam int EXPECTED_CHECKS = EXPECTED_ISOLATED_CHECKS + EXPECTED_ROUND_TRIP_CHECKS;
+
+    localparam logic [127:0] C_PLAINTEXT = 128'h00112233445566778899aabbccddeeff;
+    localparam logic [127:0] C_CIPHERTEXT = 128'h69c4e0d86a7b0430d8cdb78070b4c55a;
+    // FIPS-197 (2001), Apêndice C.1: K0..K10 da chave 000102...0f.
+    // Referências fixas: este teste não verifica expansão de chave ou FSM integrada.
+    localparam logic [127:0] C_ROUND_KEYS [0:10] = '{
+        128'h000102030405060708090a0b0c0d0e0f,
+        128'hd6aa74fdd2af72fadaa678f1d6ab76fe,
+        128'hb692cf0b643dbdf1be9bc5006830b3fe,
+        128'hb6ff744ed2c2c9bf6c590cbf0469bf41,
+        128'h47f7f7bc95353e03f96c32bcfd058dfd,
+        128'h3caaa3e8a99f9deb50f3af57adf622aa,
+        128'h5e390f7df7a69296a7553dc10aa31f6b,
+        128'h14f9701ae35fe28c440adf4d4ea9c026,
+        128'h47438735a41c65b9e016baf4aebf7ad2,
+        128'h549932d1f08557681093ed9cbe2c974e,
+        128'h13111d7fe3944a17f307a78b4d2b30c5
+    };
 
     minisoc_aes_sub_bytes u_sub (.i_state(state_in), .o_state(sub_out));
     minisoc_aes_inv_sub_bytes u_inv_sub (.i_state(state_in), .o_state(inv_sub_out));
@@ -85,6 +107,78 @@ module tb_minisoc_aes_semana_03;
             check_state("C.1 InvMixColumns", inv_mix_out, end_value);
         end
         $display("PASS FIPS-197 Appendix C.1 inverse round %0d", round_number);
+    endtask
+
+    // Reutiliza os mesmos DUTs após os testes isolados, no mesmo fluxo de estímulos.
+    // Cada etapa recebe a saída real da anterior, amostrada após estabilização.
+    task automatic check_round_trip;
+        logic [127:0] current_state;
+        logic [127:0] encrypted_state;
+        int unsigned checks_before;
+
+        checks_before = checks;
+        $display("\n========== IDA E VOLTA AES-128 / FIPS C.1 ==========");
+        $display("ORIGINAL           = %032h", C_PLAINTEXT);
+        $display("CHAVE K0           = %032h", C_ROUND_KEYS[0]);
+        $display("CIFRADO ESPERADO    = %032h", C_CIPHERTEXT);
+
+        state_in = C_PLAINTEXT;
+        key_in = C_ROUND_KEYS[0];
+        #1 current_state = add_out;
+        $display("CIFRA inicial K0   = %032h", current_state);
+
+        for (int round_number = 1; round_number <= 10; round_number++) begin
+            state_in = current_state;
+            #1 current_state = sub_out;
+            state_in = current_state;
+            #1 current_state = shift_out;
+            if (round_number != 10) begin
+                state_in = current_state;
+                #1 current_state = mix_out;
+            end
+            state_in = current_state;
+            key_in = C_ROUND_KEYS[round_number];
+            #1 current_state = add_out;
+            $display("CIFRA rodada %0d K%0d = %032h",
+                     round_number, round_number, current_state);
+        end
+
+        encrypted_state = current_state;
+        $display("CIFRADO CALCULADO   = %032h", encrypted_state);
+        // Uma ida e volta sozinha poderia ocultar erros que se anulam.
+        check_state("ida e volta: ciphertext FIPS C.1", encrypted_state, C_CIPHERTEXT);
+        $display("PASS CIFRA: resultado corresponde ao ciphertext da FIPS C.1");
+
+        // A inversa parte do ciphertext calculado pelo RTL, nunca da constante esperada.
+        state_in = encrypted_state;
+        key_in = C_ROUND_KEYS[10];
+        #1 current_state = add_out;
+        $display("INVERSA inicial K10 = %032h", current_state);
+
+        for (int round_number = 1; round_number <= 10; round_number++) begin
+            state_in = current_state;
+            #1 current_state = inv_shift_out;
+            state_in = current_state;
+            #1 current_state = inv_sub_out;
+            state_in = current_state;
+            key_in = C_ROUND_KEYS[10 - round_number];
+            #1 current_state = add_out;
+            if (round_number != 10) begin
+                state_in = current_state;
+                #1 current_state = inv_mix_out;
+            end
+            $display("INVERSA rodada %0d K%0d = %032h",
+                     round_number, 10 - round_number, current_state);
+        end
+
+        $display("\nORIGINAL           = %032h", C_PLAINTEXT);
+        $display("CIFRADO PELO RTL    = %032h", encrypted_state);
+        $display("RECUPERADO PELO RTL = %032h", current_state);
+        check_state("ida e volta: plaintext recuperado", current_state, C_PLAINTEXT);
+        if (checks - checks_before != EXPECTED_ROUND_TRIP_CHECKS)
+            $fatal(1, "FAIL contagem de comparacoes da ida e volta");
+        $display("SEMANA_03_ROUND_TRIP_PASS checks=%0d", checks - checks_before);
+        $display("==================================================\n");
     endtask
 
     initial begin : stimulus
@@ -188,6 +282,13 @@ module tb_minisoc_aes_semana_03;
             128'h000102030405060708090a0b0c0d0e0f,
             128'h00112233445566778899aabbccddeeff,
             128'h00112233445566778899aabbccddeeff);
+
+        if (checks != EXPECTED_ISOLATED_CHECKS)
+            $fatal(1, "FAIL incomplete isolated test: %0d/%0d checks",
+                   checks, EXPECTED_ISOLATED_CHECKS);
+        $display("SEMANA_03_ISOLATED_PASS checks=%0d", checks);
+
+        check_round_trip();
 
         if (checks != EXPECTED_CHECKS)
             $fatal(1, "FAIL incomplete test: %0d/%0d checks", checks, EXPECTED_CHECKS);
