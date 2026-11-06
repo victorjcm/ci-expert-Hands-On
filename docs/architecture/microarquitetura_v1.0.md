@@ -2,22 +2,7 @@
 
 ## 1. Organização interna
 
-```mermaid
-flowchart LR
-    HOST["Mestre SPI"] <--> RX["minisoc_spi: RX/TX em spi_sclk"]
-    RX <-->|"mailboxes e toggles"| CFG["minisoc_spi: registros em clk always-on"]
-    CFG --> PLL["minisoc_pll_mock"]
-    PLL -->|"sys_clk e locked"| RST["minisoc_top: reset do sistema"]
-    CFG <-->|"comando/configuração e status com handshake"| AES["minisoc_aes_top: FSM e modos"]
-    RST --> AES
-    AES <-->|"start, busy e done"| KEY["minisoc_aes_key_exp: K0..K10"]
-    KEY <-->|"chave e índice"| DP["minisoc_aes_dp: estado e rodada iterativa"]
-    AES <--> DP
-    AES <-->|"endereço, escrita e retorno de leitura"| ARB["minisoc_top: ownership e seleção segura do porto"]
-    EXT["MEMORY DATA em mem_clk"] <--> ARB
-    CFG -->|"MEM_SEL_AES"| ARB
-    ARB <--> MEM["minisoc_memory: 1024 x 32, single-port"]
-```
+![Figura 1. Organização interna.](images/organizacao_interna_v1.0.png)
 
 `minisoc_top.sv` conectará os blocos, reset e seleção do porto. Permanecem
 exatamente as portas externas da seção 3: `clk`, `rst_n`, `spi_sclk`,
@@ -62,15 +47,7 @@ por SubBytes e quatro colunas em paralelo. Reutiliza-se a rodada por dez passos,
 reduzindo replicação em relação a dez rodadas desenroladas. Caminhos direto e
 inverso separados simplificam controle e verificação nesta versão.
 
-```mermaid
-flowchart LR
-    Q["state_q"] --> SB["SubBytes"] --> SR["ShiftRows"] --> MC["MixColumns ou bypass"] --> AK["XOR Kr"]
-    Q --> ISR["InvShiftRows"] --> ISB["InvSubBytes"] --> IAK["XOR Kr"] --> IMC["InvMixColumns ou bypass"]
-    AK --> MUX["seleção do próximo estado"]
-    IMC --> MUX
-    INIT["entrada XOR K0 ou K10"] --> MUX
-    MUX --> Q
-```
+![Figura 2. Datapath iterativo AES-128.](images/datapath_aes_v1.0.png)
 
 | Fase | Cifra | Cifra inversa convencional |
 | --- | --- | --- |
@@ -120,28 +97,7 @@ com revisão da latência. Não há resultados de área, potência ou timing.
 
 ## 3. FSM proposta de `minisoc_aes_top`
 
-```mermaid
-stateDiagram-v2
-    [*] --> IDLE
-    IDLE --> CHECK: START recebido e snapshot capturado
-    CHECK --> IDLE: configuração inválida / ERROR
-    CHECK --> KEY_INIT: configuração válida
-    KEY_INIT --> KEY_EXPAND
-    KEY_EXPAND --> READ_REQ: done da expansão
-    READ_REQ --> READ_CAPTURE
-    READ_CAPTURE --> READ_REQ: próxima palavra
-    READ_CAPTURE --> PREPARE: quatro palavras lidas
-    PREPARE --> AES_INIT
-    AES_INIT --> AES_ROUND: start aceito pelo datapath
-    AES_ROUND --> AES_ROUND: done do datapath = 0
-    AES_ROUND --> POSTPROCESS: done do datapath = 1
-    POSTPROCESS --> WRITE_WORD
-    WRITE_WORD --> WRITE_WORD: palavras 0 a 2
-    WRITE_WORD --> NEXT_BLOCK: palavra 3 gravada
-    NEXT_BLOCK --> READ_REQ: há outro bloco
-    NEXT_BLOCK --> COMPLETE: último bloco
-    COMPLETE --> IDLE
-```
+![Figura 3. FSM do engine AES.](images/fsm_aes_v1.0.png)
 
 Ao aceitar a solicitação, o engine captura KEY, IV, COUNTER, MODE, DECRYPT e
 NUM_BLOCKS do snapshot recebido do SPI. CHECK valida
