@@ -18,14 +18,16 @@ RTL_FILES = $(RTL_DIR)/minisoc_aes/minisoc_aes_sbox.sv \
 			$(RTL_DIR)/minisoc_aes/minisoc_aes_inv_sbox.sv \
 			$(RTL_DIR)/minisoc_aes/minisoc_aes_inv_sub_bytes.sv \
 			$(RTL_DIR)/minisoc_aes/minisoc_aes_inv_shift_rows.sv \
-			$(RTL_DIR)/minisoc_aes/minisoc_aes_inv_mix_columns.sv
+			$(RTL_DIR)/minisoc_aes/minisoc_aes_inv_mix_columns.sv \
+			$(RTL_DIR)/minisoc_aes/minisoc_aes_key_exp.sv \
+			$(RTL_DIR)/minisoc_aes/minisoc_aes_dp.sv
 
-TB_FILES = $(TB_DIR)/tb_minisoc_aes_semana_03.sv
+TB_FILES = $(TB_DIR)/tb_minisoc_aes_semana_04.sv
 
 # ==========================================
 # Top do testbench
 # ==========================================
-TOP = tb_minisoc_aes_semana_03
+TOP = tb_minisoc_aes_semana_04
 
 # ==========================================
 # Flags das ferramentas
