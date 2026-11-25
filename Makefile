@@ -10,24 +10,15 @@ SYN_DIR   = syn
 # ==========================================
 PKG_FILES =
 
-RTL_FILES = $(RTL_DIR)/minisoc_aes/minisoc_aes_sbox.sv \
-			$(RTL_DIR)/minisoc_aes/minisoc_aes_sub_bytes.sv \
-			$(RTL_DIR)/minisoc_aes/minisoc_aes_shift_rows.sv \
-			$(RTL_DIR)/minisoc_aes/minisoc_aes_mix_columns.sv \
-			$(RTL_DIR)/minisoc_aes/minisoc_aes_add_round_key.sv \
-			$(RTL_DIR)/minisoc_aes/minisoc_aes_inv_sbox.sv \
-			$(RTL_DIR)/minisoc_aes/minisoc_aes_inv_sub_bytes.sv \
-			$(RTL_DIR)/minisoc_aes/minisoc_aes_inv_shift_rows.sv \
-			$(RTL_DIR)/minisoc_aes/minisoc_aes_inv_mix_columns.sv \
-			$(RTL_DIR)/minisoc_aes/minisoc_aes_key_exp.sv \
-			$(RTL_DIR)/minisoc_aes/minisoc_aes_dp.sv
+RTL_FILES = $(RTL_DIR)/minisoc_spi/minisoc_spi.sv \
+			$(RTL_DIR)/minisoc_pll/minisoc_pll_mock.sv
 
-TB_FILES = $(TB_DIR)/tb_minisoc_aes_semana_04.sv
+TB_FILES = $(TB_DIR)/tb_minisoc_semana_05.sv
 
 # ==========================================
 # Top do testbench
 # ==========================================
-TOP = tb_minisoc_aes_semana_04
+TOP = tb_minisoc_semana_05
 
 # ==========================================
 # Flags das ferramentas
@@ -37,10 +28,12 @@ TIMESCALE = 1ns/1ps
 VLOGAN_FLAGS = -full64 \
 			   -sverilog \
 			   -kdb \
+			   -l vlogan.log \
 			   +lint=all
 
 VCS_FLAGS = -full64 \
 			-timescale=$(TIMESCALE) \
+			-l vcs.log \
 			-debug_access+all \
 			-kdb
 
@@ -63,7 +56,7 @@ compile: syntax
 # Simulação
 # ==========================================
 run: compile
-	./simv
+	./simv -l simv.log
 
 # ==========================================
 # Abrir waveform
