@@ -1,0 +1,17 @@
+Evidência fornecida pelo usuário em 25/11/2026.
+Transcrição parcial das linhas de resultado do print execucao_2026-11-25.png.
+Este arquivo não é o simv.log original nem uma execução do assistente.
+
+./simv -l simv.log
+Compiler version X-2025.06-SP2_Full64; Runtime version X-2025.06-SP2_Full64; Nov 25 17:21 2026
+PLL divisor=1 lock apos 7.251 ns
+PLL divisor=2 lock apos 10.001 ns
+PLL divisor=4 lock apos 16.501 ns
+PLL divisor=8 lock apos 11.001 ns
+PLL divisor=1 lock apos 14.751 ns
+SEMANA_05_PASS checks=75066 starts=3 locks=5
+$finish called from file "tb/tb_minisoc_semana_05.sv", line 396.
+$finish at simulation time            548284156
+Time: 548284156 ps
+CPU Time: 0.870 seconds
+Wed Nov 25 17:21:15 2026

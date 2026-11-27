@@ -1,0 +1,57 @@
+Trecho de análise/lint enviado pelo usuário em 25/11/2026.
+Escapes de formatação da mensagem foram convertidos em espaços e quebras de linha.
+Não é o vlogan.log completo. Não há erros no trecho; há dez avisos Lint-[NS].
+
+Parsing design file 'rtl/minisoc_spi/minisoc_spi.sv'
+Parsing design file 'rtl/minisoc_pll/minisoc_pll_mock.sv'
+Parsing design file 'tb/tb_minisoc_semana_05.sv'
+
+Lint-[NS] Null statement
+tb/tb_minisoc_semana_05.sv, 90
+  Null statement is used in following verilog source.
+  Source info:         #(spi_half);
+
+Lint-[NS] Null statement
+tb/tb_minisoc_semana_05.sv, 134
+  Null statement is used in following verilog source.
+  Source info:         repeat (4) @(negedge clk);
+
+Lint-[NS] Null statement
+tb/tb_minisoc_semana_05.sv, 136
+  Null statement is used in following verilog source.
+  Source info:         #2.1;
+
+Lint-[NS] Null statement
+tb/tb_minisoc_semana_05.sv, 143
+  Null statement is used in following verilog source.
+  Source info:         #0.001;
+
+Lint-[NS] Null statement
+tb/tb_minisoc_semana_05.sv, 164
+  Null statement is used in following verilog source.
+  Source info:         #0.001;
+
+Lint-[NS] Null statement
+tb/tb_minisoc_semana_05.sv, 178
+  Null statement is used in following verilog source.
+  Source info:         #0.001;
+
+Lint-[NS] Null statement
+tb/tb_minisoc_semana_05.sv, 191
+  Null statement is used in following verilog source.
+  Source info:             #4.1;
+
+Lint-[NS] Null statement
+tb/tb_minisoc_semana_05.sv, 203
+  Null statement is used in following verilog source.
+  Source info:             @(posedge sys_clk);
+
+Lint-[NS] Null statement
+tb/tb_minisoc_semana_05.sv, 282
+  Null statement is used in following verilog source.
+  Source info:         @(negedge clk);
+
+Lint-[NS] Null statement
+tb/tb_minisoc_semana_05.sv, 323
+  Null statement is used in following verilog source.
+  Source info:         #100;
