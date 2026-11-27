@@ -10,6 +10,7 @@ tmp/
 AGENTS.md
 # Resultados gerados pelo fluxo MiniSoC
 semana_05.vcd
+semana_06.vcd
 tb/build/
 syn/reports/
 syn/output/

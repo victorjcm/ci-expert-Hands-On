@@ -10,18 +10,18 @@ SYN_DIR   = syn
 # ==========================================
 PKG_FILES =
 
-RTL_FILES = $(RTL_DIR)/minisoc_spi/minisoc_spi.sv \
-			$(RTL_DIR)/minisoc_pll/minisoc_pll_mock.sv
+RTL_FILES = $(wildcard $(RTL_DIR)/minisoc_aes/*.sv) \
+			$(RTL_DIR)/minisoc_mem/minisoc_memory.sv
 
-TB_FILES = $(TB_DIR)/tb_minisoc_semana_05.sv
+TB_FILES = $(TB_DIR)/tb_minisoc_semana_06.sv
 
 # ==========================================
 # Top do testbench
 # ==========================================
-TOP = tb_minisoc_semana_05
+TOP = tb_minisoc_semana_06
 
 # ==========================================
-# Flags das ferramentas
+# Flags 
 # ==========================================
 TIMESCALE = 1ns/1ps
 
@@ -45,6 +45,11 @@ syntax:
 		$(PKG_FILES) \
 		$(RTL_FILES) \
 		$(TB_FILES)
+
+# Geração explícita pelo usuário; não é disparada por syntax/compile/run.
+PYTHON ?= python3
+vectors:
+	$(PYTHON) scripts/gen_semana_06_vectors.py
 
 # ==========================================
 # Compilação / Elaboração
@@ -120,4 +125,4 @@ clean_sim:
 # ==========================================
 clean: clean_sim clean_synth
 
-.PHONY: syntax compile run wave synth clean clean_sim clean_synth
+.PHONY: syntax vectors compile run wave synth clean clean_sim clean_synth
