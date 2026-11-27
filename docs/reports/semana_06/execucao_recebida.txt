@@ -1,0 +1,39 @@
+Evidência fornecida pelo usuário em 26/11/2026.
+Transcrição do print execucao_2026-11-26.png, com espaçamento normalizado.
+Este arquivo não é o simv.log original nem uma execução do assistente.
+A data/hora abaixo é a exibida no terminal; o print não informa seu fuso horário.
+
+Chronologic VCS simulator copyright 1991-2025
+Contains Synopsys proprietary information.
+Compiler version X-2025.06-SP2_Full64; Runtime version X-2025.06-SP2_Full64; Nov 26 21:26 2026
+CASO_OK id=0 mode=0 decrypt=0 blocks=1
+CASO_OK id=1 mode=0 decrypt=1 blocks=1
+CASO_OK id=2 mode=0 decrypt=0 blocks=2
+CASO_OK id=3 mode=0 decrypt=1 blocks=2
+CASO_OK id=4 mode=0 decrypt=0 blocks=256
+CASO_OK id=5 mode=0 decrypt=1 blocks=256
+CASO_OK id=6 mode=1 decrypt=0 blocks=1
+CASO_OK id=7 mode=1 decrypt=1 blocks=1
+CASO_OK id=8 mode=1 decrypt=0 blocks=2
+CASO_OK id=9 mode=1 decrypt=1 blocks=2
+CASO_OK id=10 mode=1 decrypt=0 blocks=256
+CASO_OK id=11 mode=1 decrypt=1 blocks=256
+CASO_OK id=12 mode=5 decrypt=0 blocks=1
+CASO_OK id=13 mode=5 decrypt=1 blocks=1
+CASO_OK id=14 mode=5 decrypt=0 blocks=2
+CASO_OK id=15 mode=5 decrypt=1 blocks=2
+CASO_OK id=16 mode=5 decrypt=0 blocks=256
+CASO_OK id=17 mode=5 decrypt=1 blocks=256
+CASO_OK id=18 mode=5 decrypt=0 blocks=2
+CASO_OK id=19 mode=5 decrypt=1 blocks=2
+CASO_OK id=20 mode=0 decrypt=0 blocks=1
+CASO_OK id=21 mode=0 decrypt=1 blocks=1
+CASO_OK id=21 mode=0 decrypt=1 blocks=1
+CASO_OK id=21 mode=0 decrypt=1 blocks=1
+SEMANA_06_PASS checks=314242 operations=24 rejected=12 vectors=22
+$finish called from file "tb/tb_minisoc_semana_06.sv", line 420.
+$finish at simulation time 940048001
+V C S   S i m u l a t i o n   R e p o r t
+Time: 940048001 ps
+CPU Time: 4.680 seconds; Data structure size: 0.1Mb
+Thu Nov 26 21:26:52 2026

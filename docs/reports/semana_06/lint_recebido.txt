@@ -1,0 +1,138 @@
+Trecho de análise/lint enviado pelo usuário em 26/11/2026.
+Escapes de formatação da mensagem foram convertidos em espaços e quebras de linha.
+Não é o vlogan.log completo. Não há erros no trecho; há 23 avisos Lint-[NS], todos no TB.
+O assistente não executou análise, lint, compilação ou simulação.
+
+Parsing design file 'rtl/minisoc_aes/minisoc_aes_shift_rows.sv'
+Parsing design file 'rtl/minisoc_aes/minisoc_aes_inv_mix_columns.sv'
+Parsing design file 'rtl/minisoc_aes/minisoc_aes_mix_columns.sv'
+Parsing design file 'rtl/minisoc_aes/minisoc_aes_inv_sub_bytes.sv'
+Parsing design file 'rtl/minisoc_aes/minisoc_aes_top.sv'
+Parsing design file 'rtl/minisoc_aes/minisoc_aes_sbox.sv'
+Parsing design file 'rtl/minisoc_aes/minisoc_aes_dp.sv'
+Parsing design file 'rtl/minisoc_aes/minisoc_aes_inv_shift_rows.sv'
+Parsing design file 'rtl/minisoc_aes/minisoc_aes_inv_sbox.sv'
+Parsing design file 'rtl/minisoc_aes/minisoc_aes_key_exp.sv'
+Parsing design file 'rtl/minisoc_aes/minisoc_aes_add_round_key.sv'
+Parsing design file 'rtl/minisoc_aes/minisoc_aes_sub_bytes.sv'
+Parsing design file 'rtl/minisoc_mem/minisoc_memory.sv'
+Parsing design file 'tb/tb_minisoc_semana_06.sv'
+
+Lint-[NS] Null statement
+tb/tb_minisoc_semana_06.sv, 97
+  Null statement is used in following verilog source.
+  Source info:         @(posedge clk);
+
+Lint-[NS] Null statement
+tb/tb_minisoc_semana_06.sv, 99
+  Null statement is used in following verilog source.
+  Source info:         #0.1;
+
+Lint-[NS] Null statement
+tb/tb_minisoc_semana_06.sv, 103
+  Null statement is used in following verilog source.
+  Source info:             @(negedge clk);
+
+Lint-[NS] Null statement
+tb/tb_minisoc_semana_06.sv, 104
+  Null statement is used in following verilog source.
+  Source info:             #0.001;
+
+Lint-[NS] Null statement
+tb/tb_minisoc_semana_06.sv, 116
+  Null statement is used in following verilog source.
+  Source info:         repeat (3) @(negedge clk);
+
+Lint-[NS] Null statement
+tb/tb_minisoc_semana_06.sv, 120
+  Null statement is used in following verilog source.
+  Source info:         @(negedge clk);
+
+Lint-[NS] Null statement
+tb/tb_minisoc_semana_06.sv, 152
+  Null statement is used in following verilog source.
+  Source info:         @(negedge clk);
+
+Lint-[NS] Null statement
+tb/tb_minisoc_semana_06.sv, 159
+  Null statement is used in following verilog source.
+  Source info:         @(posedge clk);
+
+Lint-[NS] Null statement
+tb/tb_minisoc_semana_06.sv, 160
+  Null statement is used in following verilog source.
+  Source info:         #0.001;
+
+Lint-[NS] Null statement
+tb/tb_minisoc_semana_06.sv, 180
+  Null statement is used in following verilog source.
+  Source info:             #0.001;
+
+Lint-[NS] Null statement
+tb/tb_minisoc_semana_06.sv, 211
+  Null statement is used in following verilog source.
+  Source info:         repeat (2) @(negedge clk);
+
+Lint-[NS] Null statement
+tb/tb_minisoc_semana_06.sv, 212
+  Null statement is used in following verilog source.
+  Source info:         #0.001;
+
+Lint-[NS] Null statement
+tb/tb_minisoc_semana_06.sv, 228
+  Null statement is used in following verilog source.
+  Source info:             @(negedge clk);
+
+Lint-[NS] Null statement
+tb/tb_minisoc_semana_06.sv, 240
+  Null statement is used in following verilog source.
+  Source info:             @(negedge clk);
+
+Lint-[NS] Null statement
+tb/tb_minisoc_semana_06.sv, 270
+  Null statement is used in following verilog source.
+  Source info:         @(negedge clk);
+
+Lint-[NS] Null statement
+tb/tb_minisoc_semana_06.sv, 274
+  Null statement is used in following verilog source.
+  Source info:         @(posedge clk);
+
+Lint-[NS] Null statement
+tb/tb_minisoc_semana_06.sv, 275
+  Null statement is used in following verilog source.
+  Source info:         #0.001;
+
+Lint-[NS] Null statement
+tb/tb_minisoc_semana_06.sv, 280
+  Null statement is used in following verilog source.
+  Source info:             @(negedge clk);
+
+Lint-[NS] Null statement
+tb/tb_minisoc_semana_06.sv, 302
+  Null statement is used in following verilog source.
+  Source info:             @(negedge clk);
+
+Lint-[NS] Null statement
+tb/tb_minisoc_semana_06.sv, 324
+  Null statement is used in following verilog source.
+  Source info:         repeat (4) @(negedge clk);
+
+Lint-[NS] Null statement
+tb/tb_minisoc_semana_06.sv, 349
+  Null statement is used in following verilog source.
+  Source info:         repeat (3) @(negedge clk);
+
+Lint-[NS] Null statement
+tb/tb_minisoc_semana_06.sv, 358
+  Null statement is used in following verilog source.
+  Source info:         @(negedge clk);
+
+Lint-[NS] Null statement
+tb/tb_minisoc_semana_06.sv, 363
+  Null statement is used in following verilog source.
+  Source info:         repeat (4) @(negedge clk);
+
+CPU time: .385 seconds to compile
+vcs -full64 -timescale=1ns/1ps -l vcs.log -debug_access+all -kdb -top tb_minisoc_semana_06
+Doing common elaboration
